@@ -1,0 +1,63 @@
+{
+  "name": "doctor-sabz-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "server": "node server/server.js",
+    "start:combined": "concurrently \"npm run start\" \"npm run server\""
+  },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.3.1",
+    "@types/shortid": "^2.2.0",
+    "@types/ws": "^8.5.14",
+    "axios": "^1.7.9",
+    "bcrypt": "^5.1.1",
+    "date-fns": "^4.1.0",
+    "date-fns-tz": "^3.2.0",
+    "express": "^4.21.2",
+    "file-type": "^20.4.1",
+    "fluent-ffmpeg": "^2.1.3",
+    "formik": "^2.4.6",
+    "framer-motion": "^12.4.10",
+    "jose": "^6.0.8",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "next": "15.1.6",
+    "next-auth": "^5.0.0-beta.25",
+    "next-themes": "^0.4.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-hot-toast": "^2.5.2",
+    "react-icons": "^5.5.0",
+    "shortid": "^2.2.17",
+    "uuid": "^11.1.0",
+    "ws": "^8.18.1",
+    "yup": "^1.6.1",
+    "zod": "^3.24.2",
+    "zustand": "^5.0.3"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@types/bcrypt": "^5.0.2",
+    "@types/fluent-ffmpeg": "^2.1.27",
+    "@types/jsonwebtoken": "^9.0.8",
+    "@types/multer": "^1.4.12",
+    "@types/node": "^20.17.19",
+    "@types/react": "^19",
+    "@types/react-dom": "^19.0.4",
+    "concurrently": "^9.1.2",
+    "postcss": "^8",
+    "prettier": "^3.5.3",
+    "prettier-plugin-tailwindcss": "^0.6.11",
+    "prisma": "^6.3.1",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}

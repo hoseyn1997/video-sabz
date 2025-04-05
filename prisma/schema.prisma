@@ -1,0 +1,311 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  Id                   String  @id @default(uuid())
+  UserName             String  @unique
+  Password             String
+  EmailConfirmed       Boolean @default(false)
+  PhoneNumber          String  @unique
+  PhoneNumberConfirmed Boolean @default(false)
+  Role                 String  @default("User")
+  Bio                  String?
+  Email                String? @unique
+
+  PhoneConfirmationCode String?  @default("")
+  IsCountingDown        Boolean  @default(false)
+  CountingDownStart     DateTime @default(now())
+  CountingDownEnd       DateTime @default(now())
+
+  // relations
+  Photo            UserPhoto?
+  Collections      CollectionAttendee[]
+  FollowedTeachers TeacherFollow[]
+  Comments         Comment[]
+  SavedCollections CollectionSave[]
+  SavedVideos      VideoSave[]
+  LikedVideos      VideoLike[]
+  PlaylistItems    PlaylistItem[]
+}
+
+model Teacher {
+  Id           String   @id @default(uuid())
+  FullName     String
+  FName        String
+  LName        String
+  Bio          String?
+  ContactEmail String?  @unique
+  ContactPhone String   @unique
+  CreatedAt    DateTime @default(now())
+  UpdatedAt    DateTime @updatedAt
+  IsActive     Boolean  @default(true)
+
+  // relations
+  Collections Collection[]
+  Followers   TeacherFollow[]
+  Photo       TeacherPhoto?
+
+  // Indexes for filtering
+  @@index([FullName])
+  @@index([ContactEmail])
+}
+
+model Collection {
+  Id          String   @id @default(uuid())
+  IntId       Int      @unique @default(autoincrement())
+  ShortId     String   @unique @db.Char(7)
+  Title       String
+  Cost        String
+  DisCount    String
+  Description String
+  IsActive    Boolean  @default(true)
+  CreatedAt   DateTime @default(now())
+  UpdatedAt   DateTime @updatedAt
+  Category    String?
+  Level       String?
+  Score       Int?
+  TeacherId   String
+
+  // relations
+  Videos       Video[]
+  Photo        CollectionPhoto?
+  Attendees    CollectionAttendee[]
+  Teacher      Teacher              @relation(fields: [TeacherId], references: [Id], onDelete: Cascade)
+  SavedByUsers CollectionSave[]
+
+  @@index([Cost, DisCount])
+  @@index([Title, Description])
+}
+
+model Photo {
+  Id       String @id @default(uuid())
+  FilePath String
+
+  // relations
+  Collections CollectionPhoto[]
+  Users       UserPhoto[]
+  Teacher     TeacherPhoto[]
+  Videos      VideoPhoto[]
+}
+
+model UserPhoto {
+  Id      String @id @default(uuid())
+  PhotoId String
+  UserId  String @unique
+
+  // relations
+  Photo Photo @relation(fields: [PhotoId], references: [Id], onDelete: Cascade)
+  User  User  @relation(fields: [UserId], references: [Id], onDelete: Cascade)
+
+  @@unique([PhotoId, UserId])
+}
+
+model TeacherPhoto {
+  Id        String @id @default(uuid())
+  PhotoId   String
+  TeacherId String @unique
+
+  // relations
+  Photo   Photo   @relation(fields: [PhotoId], references: [Id], onDelete: Cascade)
+  Teacher Teacher @relation(fields: [TeacherId], references: [Id], onDelete: Cascade)
+
+  @@unique([PhotoId, TeacherId])
+}
+
+model CollectionPhoto {
+  Id           String @id @default(uuid())
+  PhotoId      String
+  CollectionId String @unique
+
+  // relations
+  Collection Collection @relation(fields: [CollectionId], references: [Id], onDelete: Cascade)
+  Photo      Photo      @relation(fields: [PhotoId], references: [Id], onDelete: Cascade)
+
+  @@unique([PhotoId, CollectionId])
+}
+
+model CollectionAttendee {
+  Id             String   @id @default(uuid())
+  IsHost         Boolean
+  IsAllowed      Boolean
+  UserId         String
+  CollectionId   String
+  AttendanceDate DateTime @default(now())
+
+  // relations
+  Collection Collection @relation(fields: [CollectionId], references: [Id], onDelete: Cascade)
+  User       User       @relation(fields: [UserId], references: [Id], onDelete: Cascade)
+
+  @@unique([UserId, CollectionId])
+  @@index([AttendanceDate])
+}
+
+model TeacherFollow {
+  Id         String   @id @default(uuid())
+  UserId     String
+  TeacherId  String
+  FollowedAt DateTime @default(now())
+
+  // Relations
+  User    User    @relation(fields: [UserId], references: [Id], onDelete: Cascade)
+  Teacher Teacher @relation(fields: [TeacherId], references: [Id], onDelete: Cascade)
+
+  // Prevent duplicate follows
+  @@unique([UserId, TeacherId])
+  // Indexes for faster queries
+  @@index([UserId])
+  @@index([TeacherId])
+  @@index([FollowedAt])
+}
+
+model Video {
+  Id           String   @id @default(uuid())
+  IntId        Int      @unique @default(autoincrement())
+  ShortId      String   @unique @db.Char(7)
+  IsFree       Boolean? @default(false)
+  Title        String
+  Description  String?
+  Order        Int
+  FilePath     String
+  CreatedAt    DateTime @default(now())
+  UpdatedAt    DateTime @updatedAt
+  CollectionId String
+
+  // relations
+  Collection   Collection     @relation(fields: [CollectionId], references: [Id], onDelete: Cascade)
+  Comments     Comment[]
+  SavedByUsers VideoSave[]
+  LikedByUsers VideoLike[]
+  InPlaylists  PlaylistItem[]
+  Photo        VideoPhoto?
+
+  @@index([CollectionId, Order])
+  @@index([CreatedAt])
+}
+
+model VideoPhoto {
+  Id      String @id @default(uuid())
+  PhotoId String
+  VideoId String @unique
+
+  // relations
+  Video Video @relation(fields: [VideoId], references: [Id], onDelete: Cascade)
+  Photo Photo @relation(fields: [PhotoId], references: [Id], onDelete: Cascade)
+
+  @@unique([PhotoId, VideoId])
+}
+
+model Comment {
+  Id         String   @id @default(uuid())
+  Text       String
+  IsApproved Boolean  @default(false)
+  CreatedAt  DateTime @default(now())
+  UpdatedAt  DateTime @updatedAt
+
+  // Relations
+  VideoId  String
+  UserId   String
+  ParentId String? // For admin replies
+  Video    Video     @relation(fields: [VideoId], references: [Id], onDelete: Cascade)
+  User     User      @relation(fields: [UserId], references: [Id], onDelete: Cascade)
+  Parent   Comment?  @relation("CommentReplies", fields: [ParentId], references: [Id], onDelete: Cascade)
+  Replies  Comment[] @relation("CommentReplies")
+
+  // Indexes
+  @@index([VideoId])
+  @@index([UserId])
+  @@index([CreatedAt])
+  @@index([ParentId])
+}
+
+model CollectionSave {
+  Id           String   @id @default(uuid())
+  UserId       String
+  CollectionId String
+  SavedAt      DateTime @default(now())
+
+  // Relations
+  User       User       @relation(fields: [UserId], references: [Id], onDelete: Cascade)
+  Collection Collection @relation(fields: [CollectionId], references: [Id], onDelete: Cascade)
+
+  // Prevent duplicate saves
+  @@unique([UserId, CollectionId])
+  // Indexes
+  @@index([UserId])
+  @@index([CollectionId])
+}
+
+model VideoSave {
+  Id      String   @id @default(uuid())
+  UserId  String
+  VideoId String
+  SavedAt DateTime @default(now())
+
+  // Relations
+  User  User  @relation(fields: [UserId], references: [Id], onDelete: Cascade)
+  Video Video @relation(fields: [VideoId], references: [Id], onDelete: Cascade)
+
+  // Prevent duplicate saves
+  @@unique([UserId, VideoId])
+  // Indexes
+  @@index([UserId])
+  @@index([VideoId])
+}
+
+model VideoLike {
+  Id      String   @id @default(uuid())
+  UserId  String
+  VideoId String
+  LikedAt DateTime @default(now())
+
+  // Relations
+  User  User  @relation(fields: [UserId], references: [Id], onDelete: Cascade)
+  Video Video @relation(fields: [VideoId], references: [Id], onDelete: Cascade)
+
+  // Prevent duplicate likes
+  @@unique([UserId, VideoId])
+  // Indexes
+  @@index([UserId])
+  @@index([VideoId])
+}
+
+model PlaylistItem {
+  Id      String       @id @default(uuid())
+  UserId  String
+  VideoId String
+  Type    PlaylistType @default(REGULAR)
+  AddedAt DateTime     @default(now())
+  Order   Int          @default(0)
+
+  // Relations
+  User  User  @relation(fields: [UserId], references: [Id], onDelete: Cascade)
+  Video Video @relation(fields: [VideoId], references: [Id], onDelete: Cascade)
+
+  // Prevent duplicate entries
+  @@unique([UserId, VideoId, Type])
+  // Indexes
+  @@index([UserId, Type])
+  @@index([AddedAt])
+}
+
+enum PlaylistType {
+  REGULAR
+  FAVORITE
+  WATCH_LATER
+}
+
+model FeedBack {
+  Id String @id @default(uuid())
+  LinkdinId String @unique
+  FeedBack String
+  Score Int
+  AddedAt DateTime @default(now())
+
+  @@index([AddedAt])
+}

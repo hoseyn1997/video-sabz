@@ -1,0 +1,278 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "DefaultFont";
+  src: url("/fonts/IRANSansWeb.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "AdditionalFont1";
+  src: url("/fonts/Lalezar-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "AdditionalFont2";
+  src: url("/fonts/Shabnam-FD.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "AdditionalFont3";
+  src: url("/fonts/VazirBold.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "AdditionalFont4";
+  src: url("/fonts/Vazirmatn-Light.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+/* new fonts:*/
+@font-face {
+  font-family: "Digi";
+  src: url("/fonts/Digikala -_font.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "hedye";
+  src: url("/fonts/hadye.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "delbar";
+  src: url("/fonts/Delbar2Bold.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "tahoma";
+  src: url("/fonts/tahoma.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "irYekanReg";
+  src: url("/fonts/IRANYekanXNoEn-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "irYekanBold";
+  src: url("/fonts/IRANYekanXNoEn-Bold.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Add this to set the default font across your application */
+body {
+  font-family: "irYekanReg", sans-serif;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.example::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.example {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.example2::-webkit-scrollbar {
+  width: 5px;
+  height: 10px;
+  overflow: hidden;
+  /* background-color: #10b981; */
+}
+.example2::-webkit-scrollbar-thumb {
+  background-color: rgba(120, 120, 126, 0.671);
+  border-radius: 10px;
+  height: 5%;
+}
+.example3::-webkit-scrollbar {
+  width: 2px;
+  height: 5px;
+  overflow: hidden;
+  /* background-color: #10b981; */
+}
+.example3::-webkit-scrollbar-thumb {
+  background-color: rgba(120, 120, 126, 0.19);
+  border-radius: 5px;
+  height: 2%;
+}
+
+.rtl {
+  direction: rtl;
+}
+.ltr {
+  direction: ltr;
+}
+
+.home-bg {
+  background: linear-gradient(98deg, #fff5be 0%, #d0f7ea 97.73%);
+}
+.top-course-info-bg {
+  background: linear-gradient(93deg, #feb6b6 0%, #b7e1ff 100%);
+}
+
+/* Custom styles for the range input (seek bar) */
+input[type="range"] {
+  -webkit-appearance: none; /* Remove default styling */
+  appearance: none;
+  background: transparent; /* Make the track transparent */
+  width: 100%; /* Full width */
+  height: 4px; /* Thinner track */
+  cursor: pointer;
+}
+
+/* Track styling */
+input[type="range"]::-webkit-slider-runnable-track {
+  background: linear-gradient(
+    to right,
+    #10b981 0%,
+    #10b981 var(--progress, 0%),
+    #ffffff98 var(--progress, 0%),
+    #ffffff98 100%
+  ); /* Green for played, gray for unplayed */
+  height: 4px; /* Thinner track */
+  border-radius: 2px; /* Rounded corners */
+}
+
+input[type="range"]::-moz-range-track {
+  background: linear-gradient(
+    to right,
+    #10b981 0%,
+    #10b981 var(--progress, 0%),
+    #ffffff98 var(--progress, 0%),
+    #ffffff98 100%
+  ); /* Green for played, gray for unplayed */
+  height: 4px; /* Thinner track */
+  border-radius: 2px; /* Rounded corners */
+}
+
+/* Thumb styling */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Remove default styling */
+  appearance: none;
+  background: #10b981; /* Green thumb */
+  width: 12px; /* Thumb size */
+  height: 12px; /* Thumb size */
+  border-radius: 50%; /* Circular thumb */
+  margin-top: -4px; /* Center the thumb vertically */
+  cursor: pointer;
+}
+
+input[type="range"]::-moz-range-thumb {
+  background: #10b981; /* Green thumb */
+  width: 12px; /* Thumb size */
+  height: 12px; /* Thumb size */
+  border-radius: 50%; /* Circular thumb */
+  cursor: pointer;
+}
+
+@keyframes fade {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.animate-fade {
+  animation: fade 3s ease-out;
+}
+
+.Just1Rows {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+.Just2Rows {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.Just3Rows {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+.Just4Rows {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
+.Just5Rows {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+}
+.Just6Rows {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+}
+
+.blog_label:after {
+  background-color: initial !important;
+  border-color: transparent;
+  border-right-color: #d26319;
+  border-style: solid;
+  border-width: 0 1.2em 1.2em 0;
+  content: "";
+  height: 0;
+  left: -0;
+  position: absolute;
+  top: 95%;
+  width: 0;
+}
+
+.thumbsing_up_down_animation {
+  animation: thumbsing_up_down_animate 0.5s;
+  animation-iteration-count: 1;
+  /* animation-fill-mode: forwards; */
+  animation-timing-function: linear;
+  animation-delay: 0s;
+  transition: all;
+  animation-duration: 1s;
+}
+
+@keyframes thumbsing_up_down_animate {
+  0% {
+    transform: rotate(0deg);
+    scale: 1;
+  }
+  25% {
+    transform: rotate(-30deg);
+    scale: 1.3;
+  }
+  50% {
+    transform: rotate(-25deg);
+    scale: 1.25;
+  }
+  75% {
+    transform: rotate(-25deg);
+    scale: 1.25;
+  }
+  100% {
+    transform: rotate(0deg);
+    scale: 1;
+  }
+}
